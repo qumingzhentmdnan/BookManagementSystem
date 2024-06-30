@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fjut.library_management_system.mapper.UserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.fjut.library_management_system.entity.User">
+        <id column="user_id" property="userId" />
+        <result column="password" property="password" />
+        <result column="phone" property="phone" />
+        <result column="is_ban" property="ban" />
+        <result column="is_expire" property="expire" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        user_id, password, phone, is_ban, is_expire
+    </sql>
+
+    <select id="getUserDetailInfo" resultType="com.fjut.library_management_system.vo.UserInfoVo">
+        select user_detail_info.user_id,phone,user_name,department,identity,
+            sex,certificate_start_date,certificate_end_date,
+            maximum_borrowing_count,already_borrowing_count,
+            total_borrowing_count,number_of_violations,owed,avatar
+        from user left join user_detail_info on user.user_id = user_detail_info.user_id
+        where user.user_id = #{userId} and user.is_deleted=0
+    </select>
+
+
+    <select id="getAllUserDetailInfo" resultType="com.fjut.library_management_system.vo.UserInfoVo">
+        select user_detail_info.user_id,phone,user_name,department,identity,
+        sex,certificate_start_date,certificate_end_date,
+        maximum_borrowing_count,already_borrowing_count,
+        total_borrowing_count,number_of_violations,owed,avatar
+        from user left join user_detail_info on user.user_id = user_detail_info.user_id
+        <where>
+            <if test="queryUser.userId!=null">
+                and user.user_id = #{queryUser.userId}
+            </if>
+            <if test="queryUser.userName!=null and queryUser.userName!=''">
+                and user_name like concat('%',#{queryUser.userName},'%')
+            </if>
+            <if test="queryUser.userPhone!=null">
+                and phone = #{queryUser.userPhone}
+            </if>
+            <if test="queryUser.userDepartment!=null and queryUser.userDepartment!=''">
+                and department like concat('%',#{queryUser.userDepartment},'%')
+            </if>
+            <if test="queryUser.userIdentity!=null and queryUser.userIdentity!=''">
+                and identity like concat('%',#{queryUser.userIdentity},'%')
+            </if>
+        and user.is_deleted=0
+        </where>
+    </select>
+
+    <select id="getUserBorrowingSortInfo" resultType="com.fjut.library_management_system.vo.UserBorrowingChartVo">
+        SELECT user_name,`count` FROM
+            (SELECT user_id,COUNT(*) AS `count`
+             FROM book_borrowing_info
+             WHERE YEAR(borrowing_date)=YEAR(NOW())
+             GROUP BY user_id
+             ORDER BY `count` DESC
+                 LIMIT 10
+            ) AS tmp
+                LEFT JOIN `user` ON user.`user_id`=tmp.user_id
+    </select>
+
+
+    <insert id="insertBatch" parameterType="java.util.List">
+        INSERT INTO user
+        (user_id, user_name,password, department, identity)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.userId}, #{item.userName},#{item.password}, #{item.department}, #{item.identity})
+        </foreach>
+    </insert>
+
+    <update id="checkVoucherEffective" >
+        UPDATE USER SET expire=1 WHERE user_id
+        IN
+        (SELECT user_id FROM user_detail_info
+        WHERE certificate_end_date &lt; certificate_start_date)
+    </update>
+</mapper>

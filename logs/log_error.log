@@ -1,0 +1,46 @@
+2024-06-28 20:51:19.782 [http-nio-8080-exec-4] ERROR c.f.l.exception.HandleException - CustomizedException(code=20001, message=对于书籍7508479889，索书号TU126-78/568/12已存在，无法添加
+已储存数据至：未保存数据)
+2024-06-28 20:52:07.239 [http-nio-8080-exec-10] ERROR c.f.l.exception.HandleException - CustomizedException(code=20001, message=对于书籍7508000889，索书号TU126-78/568/12已存在，无法添加
+已储存数据至：未保存数据)
+2024-06-28 20:53:37.004 [http-nio-8080-exec-3] ERROR c.f.l.exception.HandleException - CustomizedException(code=20001, message=对于书籍6508000889，索书号TU126-78/568/12已存在，无法添加
+已储存数据至：未保存数据)
+2024-06-28 20:55:51.338 [http-nio-8080-exec-3] ERROR c.f.l.exception.HandleException - CustomizedException(code=20001, message=对于书籍6508000889，索书号TU126-78/568/12已存在，无法添加
+已储存数据至：未保存数据)
+2024-06-28 20:56:10.633 [http-nio-8080-exec-10] ERROR c.f.l.exception.HandleException - CustomizedException(code=20001, message=对于书籍6508000889，索书号TU126-78/568/12已存在，无法添加
+已储存数据至：未保存数据)
+2024-06-28 20:56:18.012 [http-nio-8080-exec-2] ERROR c.f.l.exception.HandleException - CustomizedException(code=20001, message=对于书籍6508000889，索书号TU126-78/568/12已存在，无法添加
+已储存数据至：未保存数据)
+2024-06-28 20:56:19.547 [http-nio-8080-exec-3] ERROR c.f.l.exception.HandleException - CustomizedException(code=20001, message=对于书籍6508000889，索书号TU126-78/568/12已存在，无法添加
+已储存数据至：未保存数据)
+2024-06-28 20:56:38.984 [http-nio-8080-exec-2] ERROR c.f.l.exception.HandleException - CustomizedException(code=20001, message=对于书籍6508000889，索书号TU126-78/568/12已存在，无法添加
+已储存数据至：未保存数据)
+2024-06-28 20:57:31.584 [http-nio-8080-exec-5] ERROR c.f.l.exception.HandleException - CustomizedException(code=20001, message=对于书籍6508000889，索书号TU126-78/568/12已存在，无法添加
+已储存数据至：未保存数据)
+2024-06-28 20:57:46.017 [http-nio-8080-exec-4] ERROR c.f.l.exception.HandleException - CustomizedException(code=20001, message=对于书籍6508000889，索书号TU126-78/568/12已存在，无法添加
+已储存数据至：未保存数据)
+2024-06-28 20:58:34.689 [http-nio-8080-exec-6] ERROR c.f.l.exception.HandleException - CustomizedException(code=20001, message=对于书籍6508000889，索书号TU126-78/568/12已存在，无法添加
+已储存数据至：未保存数据)
+2024-06-28 21:07:02.044 [http-nio-8080-exec-8] ERROR c.f.l.exception.HandleException - CustomizedException(code=20001, message=对于书籍5508000889，索书号TU126-78/568/12已存在，无法添加
+已储存数据至：未保存数据)
+2024-06-28 21:09:38.857 [http-nio-8080-exec-3] ERROR c.f.l.exception.HandleException - java.util.concurrent.CompletionException: CustomizedException(code=20001, message=对于书籍5508000889，索书号TU126-78/568/12已存在，无法添加)
+2024-06-28 21:12:25.253 [http-nio-8080-exec-3] ERROR c.f.l.exception.HandleException - java.util.concurrent.CompletionException: CustomizedException(code=20001, message=对于书籍5508000889，索书号TU126-78/568/12已存在，无法添加)
+2024-06-28 21:13:25.761 [http-nio-8080-exec-4] ERROR c.f.l.exception.HandleException - java.util.concurrent.CompletionException: CustomizedException(code=20001, message=对于书籍5508000889，索书号TU126-78/568/12已存在，无法添加)
+2024-06-28 21:21:16.848 [http-nio-8080-exec-1] ERROR c.f.l.exception.HandleException - java.util.concurrent.CompletionException: CustomizedException(code=20001, message=对于书籍5508000889，索书号TU126-78/568/12已存在，无法添加)
+2024-06-28 21:21:46.650 [http-nio-8080-exec-2] ERROR c.f.l.util.excel.ReadExcelHandle - 解析失败：第1行数据校验失败：
+校验错误数据信息：classification:分类码不能为空;author:作者不能为空;callNumber:索书号不能为空;abstractInfo:摘要不能为空;price:价格不能为空;bookSize:图书板式不能为空;bookName:书名不能为空;parallelTitle:其他书名不能为空;count:添加数量不能为空;versionDescription:版本说明不能为空;series:系列丛书不能为空;notes:说明不能为空;isbn:isbn不能为空;publisher:出版社不能为空;subject:所属学科不能为空;
+已储存数据至：未保存任何数据
+2024-06-28 21:21:46.654 [http-nio-8080-exec-2] ERROR c.f.l.exception.HandleException - CustomizedException(code=20001, message=第1行数据校验失败：
+校验错误数据信息：classification:分类码不能为空;author:作者不能为空;callNumber:索书号不能为空;abstractInfo:摘要不能为空;price:价格不能为空;bookSize:图书板式不能为空;bookName:书名不能为空;parallelTitle:其他书名不能为空;count:添加数量不能为空;versionDescription:版本说明不能为空;series:系列丛书不能为空;notes:说明不能为空;isbn:isbn不能为空;publisher:出版社不能为空;subject:所属学科不能为空;
+已储存数据至：未保存任何数据)
+2024-06-28 21:22:14.172 [http-nio-8080-exec-2] ERROR c.f.l.exception.HandleException - java.util.concurrent.CompletionException: CustomizedException(code=20001, message=对于书籍5508000889，索书号TU126-78/568/12已存在，无法添加)
+2024-06-28 21:25:11.282 [http-nio-8080-exec-3] ERROR c.f.l.exception.HandleException - java.util.concurrent.CompletionException: CustomizedException(code=20001, message=对于书籍5508000889，索书号TU126-78/568/12已存在，无法添加)
+2024-06-28 21:29:36.339 [http-nio-8080-exec-3] ERROR c.f.l.exception.HandleException - CustomizedException(code=20001, message=对于书籍5508000889，索书号TU126-78/568/12已存在，无法添加)
+2024-06-28 21:29:47.559 [http-nio-8080-exec-8] ERROR c.f.l.exception.HandleException - CustomizedException(code=20001, message=对于书籍5508000889，索书号TU126-78/568/12已存在，无法添加)
+2024-06-28 21:31:21.546 [http-nio-8080-exec-7] ERROR c.f.l.exception.HandleException - CustomizedException(code=20001, message=对于书籍5508000889，索书号TU126-78/568/12已存在，无法添加)
+2024-06-28 21:33:58.116 [http-nio-8080-exec-3] ERROR c.f.l.exception.HandleException - CustomizedException(code=20001, message=对于书籍5508000889，索书号TU126-78/568/12已存在，无法添加)
+2024-06-28 21:38:22.103 [http-nio-8080-exec-5] ERROR c.f.l.exception.HandleException - CustomizedException(code=20001, message=对于书籍5508080889，索书号TU126-78/568/12已存在，无法添加)
+2024-06-28 22:41:14.166 [http-nio-8080-exec-1] ERROR c.f.l.exception.HandleException - CustomizedException(code=20001, message=对于书籍5508080889，索书号TU126-78/568/12已存在，无法添加)
+2024-06-28 22:43:51.062 [http-nio-8080-exec-4] ERROR c.f.l.exception.HandleException - CustomizedException(code=20001, message=对于书籍5578080889，索书号TU126-78/568/12已存在，无法添加)
+2024-06-28 22:45:28.489 [http-nio-8080-exec-7] ERROR c.f.l.exception.HandleException - CustomizedException(code=20001, message=对于书籍557589889，索书号TU126-78/568/12已存在，无法添加)
+2024-06-28 22:46:13.520 [http-nio-8080-exec-5] ERROR c.f.l.exception.HandleException - CustomizedException(code=20001, message=对于书籍557589889，索书号TU126-78/568/12已存在，无法添加)
+2024-06-28 22:48:41.898 [http-nio-8080-exec-4] ERROR c.f.l.exception.HandleException - CustomizedException(code=20001, message=对于书籍327589889，索书号TU126-78/568/12已存在，无法添加)

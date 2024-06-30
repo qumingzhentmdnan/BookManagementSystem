@@ -1,0 +1,6 @@
+2024-06-14 14:19:48.229 [restartedMain] INFO  c.f.l.LibraryManagementSystemApplication - Starting LibraryManagementSystemApplication using Java 21.0.1 with PID 28432 (D:\代码\项目代码\LibraryManagementSystem\LibraryManagementSystem\target\classes started by 86152 in D:\代码\项目代码\LibraryManagementSystem\LibraryManagementSystem)
+2024-06-14 14:19:48.231 [restartedMain] INFO  c.f.l.LibraryManagementSystemApplication - The following 1 profile is active: "prod"
+2024-06-14 14:19:53.272 [restartedMain] INFO  c.f.l.LibraryManagementSystemApplication - Started LibraryManagementSystemApplication in 5.856 seconds (process running for 7.443)
+2024-06-14 14:21:03.059 [restartedMain] INFO  c.f.l.LibraryManagementSystemApplication - Starting LibraryManagementSystemApplication using Java 21.0.1 with PID 3836 (D:\代码\项目代码\LibraryManagementSystem\LibraryManagementSystem\target\classes started by 86152 in D:\代码\项目代码\LibraryManagementSystem\LibraryManagementSystem)
+2024-06-14 14:21:03.061 [restartedMain] INFO  c.f.l.LibraryManagementSystemApplication - The following 1 profile is active: "prod"
+2024-06-14 14:21:07.709 [restartedMain] INFO  c.f.l.LibraryManagementSystemApplication - Started LibraryManagementSystemApplication in 5.36 seconds (process running for 6.407)

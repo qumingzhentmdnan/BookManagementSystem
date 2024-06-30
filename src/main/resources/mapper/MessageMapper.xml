@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fjut.library_management_system.mapper.MessageMapper">
+
+    <select id="selectMessageByUserId" resultType="com.fjut.library_management_system.entity.Message">
+        SELECT * FROM message
+        LEFT JOIN `user` ON user.`user_id`=#{userId}
+        WHERE user.create_time &lt; message.create_time
+        AND message.`is_deleted`=0 and user.`is_deleted`=0
+        AND (message.`to_user_id`=#{userId} Or message.`to_user_id`=0)
+        order by message.create_time desc
+        limit #{page},#{limit}
+    </select>
+
+    <select id="selectMessageCountByUserId" resultType="int">
+        SELECT count(*) FROM message
+        LEFT JOIN `user` ON user.`user_id`=#{userId}
+        WHERE user.create_time &lt; message.create_time
+          AND message.`is_deleted`=0 and user.`is_deleted`=0
+          AND (message.`to_user_id`=#{userId} Or message.`to_user_id`=0)
+    </select>
+</mapper>

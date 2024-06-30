@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fjut.library_management_system.mapper.BookInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.fjut.library_management_system.entity.BookInfo">
+        <id column="book_id" property="bookId" />
+        <result column="book_name" property="bookName" />
+        <result column="isbn" property="isbn" />
+        <result column="classification" property="classification" />
+        <result column="author" property="author" />
+        <result column="publisher" property="publisher" />
+        <result column="total" property="total" />
+        <result column="remain" property="remain" />
+        <result column="is_deleted" property="deleted" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List_Book">
+        book_name, isbn, classification, author, publisher, total, remain,
+    </sql>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List_BookDetail">
+        version_description, book_size, price, series, notes, abstract_info, subject,parallel_title
+    </sql>
+
+    <select id="getBookDetailInfo" resultType="com.fjut.library_management_system.vo.BookInfoVo">
+        select
+        book.book_id,
+        <include refid="Base_Column_List_Book"/>
+        <include refid="Base_Column_List_BookDetail"/>
+        from book left join book_detail_info on book.book_id = book_detail_info.book_id
+        <where>
+            <if test="bookId != null and bookId!=''">
+                and book.book_id = #{bookId}
+            </if>
+            <if test="isbn!=null and isbn!=''">
+                and book.isbn = #{isbn}
+            </if>
+            and book.is_deleted = 0
+            and book_detail_info.is_deleted=0
+        </where>
+    </select>
+
+    <select id="getAllBookDetailInfo" resultType="com.fjut.library_management_system.vo.BookInfoVo">
+        select book_name,isbn,classification,author,publisher,total,remain,
+        parallel_title,version_description,book_size,price,series,
+        notes,abstract_info,`subject`,GROUP_CONCAT(call_number SEPARATOR '&amp;') as bookStore
+        from book
+        left join book_detail_info on book.`book_id`=book_detail_info.`book_id`
+        left join book_store_info on book_store_info.`book_id`=book.`book_id`
+        <where>
+            <if test="queryBook.isbn!=null and queryBook.isbn!=''">
+                and book.isbn = #{queryBook.isbn}
+            </if>
+            <if test="queryBook.bookName != null and queryBook.bookName!=''">
+                and book.book_name like concat('%',#{queryBook.bookName},'%')
+            </if>
+            <if test="queryBook.author!=null and queryBook.author!=''">
+                and book.author  like concat('%',#{queryBook.author},'%')
+            </if>
+            <if test="queryBook.classification != null and queryBook.classification!=''">
+                and book.classification = #{queryBook.classification}
+            </if>
+            <if test="queryBook.publisher!=null and queryBook.publisher!=''">
+                and book.publisher like concat('%',#{queryBook.publisher},'%')
+            </if>
+        </where>
+        and book.is_deleted = 0
+        and book_detail_info.is_deleted=0
+        and book_store_info.is_deleted=0
+        GROUP BY book.book_id
+    </select>
+    
+    <select id="getBookChartInfo" resultType="com.fjut.library_management_system.vo.BookChartVo">
+        SELECT book.book_id,book.book_name, book.isbn,book.author,book.publisher,`count`
+        FROM (SELECT book_id, COUNT(*) AS `count`
+              FROM book_borrowing_info
+              GROUP BY book_id
+              ORDER BY COUNT(*) DESC
+              LIMIT 20) AS tmp
+                 LEFT JOIN book ON tmp.book_id = book.`book_id`
+    </select>
+
+    <insert id="insertBookDetailInfosBatch">
+        insert into book_detail_info (book_id, version_description, book_size, price, series, notes, abstract_info, subject, parallel_title) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.bookId}, #{item.versionDescription}, #{item.bookSize}, #{item.price}, #{item.series}, #{item.notes}, #{item.abstractInfo}, #{item.subject}, #{item.parallelTitle})
+        </foreach>
+    </insert>
+</mapper>

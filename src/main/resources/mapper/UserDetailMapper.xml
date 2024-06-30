@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fjut.library_management_system.mapper.UserDetailMapper">
+
+    <insert id="insertBatch" parameterType="java.util.List">
+        INSERT INTO user_detail_info
+        (user_id, sex, certificate_start_date, certificate_end_date, borrowing_duration, maximum_borrowing_count)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.userId}, #{item.sex}, #{item.certificateStartDate},
+             #{item.certificateEndDate}, #{item.borrowingDuration}, #{item.maximumBorrowingCount})
+        </foreach>
+    </insert>
+</mapper>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fjut.library_management_system.mapper.BookBorrowingInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.fjut.library_management_system.entity.BookBorrowingInfo">
+        <id column="borrowing_id" property="borrowingId" />
+        <result column="book_id" property="bookId" />
+        <result column="user_id" property="userId" />
+        <result column="borrowing_date" property="borrowingDate" />
+        <result column="return_date" property="returnDate" />
+        <result column="is_return" property="return" />
+        <result column="is_overtime" property="overtime" />
+    </resultMap>
+
+
+
+    <select id="getAllBorrowingInfo" resultType="com.fjut.library_management_system.vo.BorrowingVo">
+        select user.user_id,isbn,user_name,book_name,returned,overtime,book_borrowing_info.borrowing_date,book_borrowing_info.return_date,call_number
+        from book_borrowing_info
+                 left join `user` on book_borrowing_info.`user_id`=user.`user_id`
+                 left join book on book.`book_id`=book_borrowing_info.`book_id`
+                 left join book_store_info on book_store_info.id=book_borrowing_info.`store_id`
+        <where>
+            <if test="queryBorrowingVo.bookName!=null and queryBorrowingVo.bookName!=''">
+                and book_name like concat('%',#{queryBorrowingVo.bookName},'%')
+            </if>
+            <if test="queryBorrowingVo.userName!=null and queryBorrowingVo.userName!=''">
+                and user_name like concat('%',#{queryBorrowingVo.userName},'%')
+            </if>
+            <if test="queryBorrowingVo.userId!=null">
+                and user.user_id=#{queryBorrowingVo.userId}
+            </if>
+            <if test="queryBorrowingVo.returned!=null">
+                and returned=#{queryBorrowingVo.returned}
+            </if>
+            <if test="queryBorrowingVo.overtime!=null">
+                and overtime=#{queryBorrowingVo.overtime}
+            </if>
+            <if test="queryBorrowingVo.borrowingDate!=null">
+                and book_borrowing_info.borrowing_date =#{queryBorrowingVo.borrowingDate}
+            </if>
+            <if test="queryBorrowingVo.returnDate!=null">
+                and return_date =#{queryBorrowingVo.returnDate}
+            </if>
+        </where>
+        order by book_borrowing_info.borrowing_date desc
+        <if test="page!=null and queryBorrowingVo.limit!=null">
+            limit #{page},#{queryBorrowingVo.limit}
+        </if>
+    </select>
+
+    <select id="getBorrowingCount" resultType="long">
+        select count(*)
+        from book_borrowing_info
+        left join `user` on book_borrowing_info.`user_id`=user.`user_id`
+        left join book on book.`book_id`=book_borrowing_info.`book_id`
+        <where>
+            <if test="queryBorrowingVo.bookName!=null and queryBorrowingVo.bookName!=''">
+                and book_name like concat('%',#{queryBorrowingVo.bookName},'%')
+            </if>
+            <if test="queryBorrowingVo.userName!=null and queryBorrowingVo.userName!=''">
+                and user_name like concat('%',#{queryBorrowingVo.userName},'%')
+            </if>
+            <if test="queryBorrowingVo.userId!=null">
+                and user.user_id=#{queryBorrowingVo.userId}
+            </if>
+            <if test="queryBorrowingVo.returned!=null">
+                and returned=#{queryBorrowingVo.returned}
+            </if>
+            <if test="queryBorrowingVo.overtime!=null">
+                and overtime=#{queryBorrowingVo.overtime}
+            </if>
+            <if test="queryBorrowingVo.borrowingDate!=null">
+                and book_borrowing_info.borrowing_date =#{queryBorrowingVo.borrowingDate}
+            </if>
+            <if test="queryBorrowingVo.returnDate!=null">
+                and return_date =#{queryBorrowingVo.returnDate}
+            </if>
+        </where>
+    </select>
+
+    <select id="getBookBorrowingClassificationInfo" resultType="com.fjut.library_management_system.vo.BorrowingClassificationChartVo">
+        select description,tmp.count from
+            (SELECT SUBSTRING(book.classification, 1, 1) AS first_letter,count(*) as `count`
+             FROM book_borrowing_info
+                      LEFT JOIN book ON book.`book_id`=book_borrowing_info.`book_id`
+             WHERE YEAR(borrowing_date)=YEAR(NOW())
+             group by first_letter
+             order by `count` desc
+                 limit 10) as tmp
+                left join book_classification
+                          on book_classification.`classification_code`=tmp.first_letter
+    </select>
+
+  <select id="getBorrowingMonthInfoByUserId" resultType="com.fjut.library_management_system.vo.BorrowingMonthChartVo">
+      SELECT MONTH(borrowing_date) AS `month`,COUNT(*) as `count` FROM book_borrowing_info
+      WHERE YEAR(borrowing_date)=#{year} AND user_id=#{userId}
+      GROUP BY `month`
+  </select>
+
+  <select id="getBorrowingClassificationInfoByUserId" resultType="com.fjut.library_management_system.vo.BorrowingClassificationChartVo">
+        select Count(*) as `count`,book_classification.description  from book_borrowing_info
+        left join book on book.`book_id`=book_borrowing_info.`book_id`
+        left join book_classification on
+        book_classification.`classification_code`=SUBSTRING(book.`classification`,1,1)
+        where book_borrowing_info.`user_id`=#{userId} and Year(book_borrowing_info.`borrowing_date`)=#{year}
+        group by SUBSTRING(book.`classification`,1,1),book_classification.description
+    </select>
+
+    <select id="getDyingBorrowingBooks" resultType="map">
+        select user_detail_info.`user_id`,book_name,borrowing_date
+        ,DATEDIFF(DATE_ADD(borrowing_date, INTERVAL borrowing_duration DAY),now()) as duration
+        from user_detail_info
+        right join book_borrowing_info
+        on user_detail_info.`user_id`=book_borrowing_info.`user_id`
+        left join book on book_borrowing_info.`book_id`=book.`book_id`
+        where returned=0 and overtime=0 and
+        DATE_ADD(borrowing_date, INTERVAL borrowing_duration DAY)
+            &lt;
+        date_add(now(),INTERVAL 7 DAY)
+    </select>
+
+    <select id="getOvertimeBorrowingBooks" resultType="map">
+        SELECT user_detail_info.`user_id`,borrowing_id,price,borrowing_date,book_name FROM book_borrowing_info
+        LEFT JOIN user_detail_info ON user_detail_info.`user_id`=book_borrowing_info.`user_id`
+        LEFT JOIN book_detail_info ON book_borrowing_info.`book_id`=book_detail_info.`book_id`
+        LEFT JOIN book ON book.`book_id`=book_borrowing_info.`book_id`
+        WHERE returned=0 AND overtime=0
+        AND DATE_ADD(borrowing_date,INTERVAL borrowing_duration DAY) &lt; NOW()
+    </select>
+
+    <select id="getReturnBookInfo" resultType="map">
+        SELECT book.`book_id`,book_name,borrowing_id,book_borrowing_info.borrowing_date FROM book_borrowing_info
+            LEFT JOIN book ON book.`book_id`=book_borrowing_info.`book_id`
+            LEFT JOIN book_store_info ON book_borrowing_info.`store_id`=book_store_info.`id`
+        WHERE call_number=#{callNumber} AND user_id=#{userId } AND returned=0
+    </select>
+</mapper>

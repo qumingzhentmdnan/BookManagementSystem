@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fjut.library_management_system.mapper.UserPermissionMapper">
+
+    <select id="getPermissionTree" resultType="com.fjut.library_management_system.vo.UserPermissionNodeVo">
+        SELECT
+            distinct
+            permission.permission_id,
+            permission.parent_id,
+            permission.permission_name,
+            permission.description
+        FROM
+            user_role
+                LEFT JOIN
+            role ON user_role.role_id = role.role_id
+                LEFT JOIN
+            role_permission ON role_permission.role_id = role.role_id
+                LEFT JOIN
+            permission ON permission.permission_id = role_permission.permission_id
+        WHERE
+            user_role.user_id = #{userId}
+            and user_role.is_deleted = 0
+            and role.is_deleted = 0
+            and role_permission.is_deleted = 0
+    </select>
+
+    <select id="getUserRoles" resultType="com.fjut.library_management_system.entity.Role">
+        select role.description,role.`role_id`,role.`role_name`,role.`create_time`
+            from `user`
+            left join user_role on `user`.`user_id`=user_role.`user_id`
+            left join role on role.`role_id`=user_role.`role_id`
+        where user.`user_id`=#{userId} and user_role.`is_deleted`=0 and role.`is_deleted`=0
+    </select>
+
+    <select id="getRolePermissions" resultType="com.fjut.library_management_system.vo.UserPermissionNodeVo">
+        select role_permission.permission_id,parent_id,permission_name,description
+            from role_permission
+            left join permission on role_permission.`permission_id`=permission.`permission_id`
+        where role_permission.`role_id`=#{roleId} and role_permission.`is_deleted`=0 and permission.`is_deleted`=0
+    </select>
+
+    <insert id="insertRolePermissions">
+        INSERT INTO role_permission (role_id, permission_id)
+        VALUES
+        <foreach collection="list"  item="item" separator=",">
+            (#{roleId}, #{item})
+        </foreach>
+    </insert>
+
+    <update id="removeRolePermissions">
+        UPDATE role_permission
+        SET is_deleted = 1
+        WHERE role_id = #{roleId} AND permission_id IN
+        <foreach collection="list" item="item" open="(" close=")" index="index" separator=",">
+            #{item}
+        </foreach>
+    </update>
+
+    <select id="getPermissionList" resultType="String">
+        select distinct permission_name from `user_role`
+                                                 left join role on user_role.`role_id`=role.`role_id`
+                                                 left join role_permission on role_permission.`role_id`=user_role.`role_id`
+                                                 left join permission on permission.`permission_id`=role_permission.`permission_id`
+        where permission.`is_deleted`=0 and user_role.`user_id`=#{userId}
+          and role_permission.`is_deleted`=0
+          and user_role.`is_deleted`=0
+          AND permission.is_deleted = 0
+          and role.`is_deleted`=0
+    </select>
+</mapper>

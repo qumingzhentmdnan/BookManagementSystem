@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fjut.library_management_system.mapper.FineInfoMapper">
+
+<select id="getFineInfo" resultType="com.fjut.library_management_system.vo.FineVo">
+    select user.user_id,user_name,book_name,fine_price,fine_info.id as fine_id,payed,paying_date
+    from fine_info
+    left join book_borrowing_info on book_borrowing_info.`borrowing_id`=fine_info.`borrowing_id`
+    left join `user` on book_borrowing_info.`user_id`=user.`user_id`
+    left join book on book.`book_id`=book_borrowing_info.`book_id`
+    <where>
+        <if test="queryFineVo.bookName!=null and queryFineVo.bookName!=''">
+            and book_name like concat('%',#{queryFineVo.bookName},'%')
+        </if>
+        <if test="queryFineVo.userName!=null and queryFineVo.userName!=''">
+            and user_name like concat('%',#{queryFineVo.userName},'%')
+        </if>
+        <if test="queryFineVo.payed!=null">
+            and payed=#{queryFineVo.payed}
+        </if>
+        <if test="queryFineVo.payingDate!=null">
+            and paying_date=#{queryFineVo.payingDate}
+        </if>
+        <if test="queryFineVo.userId!=null">
+            and user.user_id=#{queryFineVo.userId}
+        </if>
+    </where>
+    order by paying_date desc
+    <if test="page!=null and queryFineVo.limit!=null">
+        limit #{page},#{queryFineVo.limit}
+    </if>
+</select>
+
+    <select id="getFineCount" resultType="long">
+        select count(*)
+        from fine_info
+        left join book_borrowing_info on book_borrowing_info.`borrowing_id`=fine_info.`borrowing_id`
+        left join `user` on book_borrowing_info.`user_id`=user.`user_id`
+        left join book on book.`book_id`=book_borrowing_info.`book_id`
+        <where>
+            <if test="queryFineVo.bookName!=null  and queryFineVo.bookName!=''">
+                and book_name like concat('%',#{queryFineVo.bookName},'%')
+            </if>
+            <if test="queryFineVo.userName!=null and queryFineVo.userName!=''">
+                and user_name like concat('%',#{queryFineVo.userName},'%')
+            </if>
+            <if test="queryFineVo.payed!=null">
+                and payed=#{queryFineVo.payed}
+            </if>
+            <if test="queryFineVo.payingDate!=null">
+                and paying_date=#{queryFineVo.payingDate}
+            </if>
+            <if test="queryFineVo.userId!=null">
+                and user.user_id=#{queryFineVo.userId}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryUserHasFies" resultType="int">
+        SELECT COUNT(*) FROM book_borrowing_info
+                                 INNER JOIN fine_info ON book_borrowing_info.`borrowing_id`=fine_info.`borrowing_id`
+        WHERE payed=0 AND user_id=#{userId}
+    </select>
+</mapper>
